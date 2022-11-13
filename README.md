@@ -8,8 +8,7 @@
 
 Инструкция:
 1. В корневой папке (где app и requirements.txt) прописать pip install -r requirements.txt
-2. В файле .env в папке app изменить url для подключения к базе данных в формате:
-DEV_DB_URL="postgres://postgres:ВАШ ПАРОЛЬ@ХОСТ:ПОРТ/НАЗВАНИЕ ВАШЕЙ БАЗЫ ДАННЫХ"
+2. В папке /app прописать aerich init-db
 3. перейти в папку app и прописать uvicorn index:app --host 127.0.0.1 --port 80 --reload
 
 Тестировать запросы нужно по адресу http://127.0.0.1/api/v1/auth/ЭНДПОИНТ ДЛЯ ТЕСТА
