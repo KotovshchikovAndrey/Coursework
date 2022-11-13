@@ -51,9 +51,9 @@ async def registration(user: UserCreateSchema):
 
     created_user, access_token, refresh_token = await auth_service.registration(user_data=user.dict())
 
-    # Отправляем данные созданного пользователя в profile микросервис через kafka producer
-    await producer.send_created_user_data_in_profile_service(
-        user_data=created_user.dict())
+    # # Отправляем данные созданного пользователя в profile микросервис через kafka producer
+    # await producer.send_created_user_data_in_profile_service(
+    #     user_data=created_user.dict())
 
     response = JSONResponse(status_code=status.HTTP_201_CREATED, content={
         'access_token': access_token,
