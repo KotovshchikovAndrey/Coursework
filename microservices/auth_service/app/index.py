@@ -30,6 +30,7 @@ async def exceptions_middleware(request: Request, call_next: tp.Callable):
                 }
             )
 
+        print(exc)
         return JSONResponse(
             status_code=500,
             content={'message': 'Непредвиденная ошибка сервера!', 'details': []}
