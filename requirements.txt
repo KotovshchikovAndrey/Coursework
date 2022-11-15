@@ -1,4 +1,6 @@
 aerich==0.7.1
+aiokafka==0.7.2
+aiomysql==0.1.1
 aiosqlite==0.17.0
 anyio==3.6.2
 asyncpg==0.27.0
@@ -16,10 +18,12 @@ filelock==3.8.0
 h11==0.14.0
 idna==2.10
 iso8601==1.1.0
+kafka-python==2.0.2
 passlib==1.7.4
 pyasn1==0.4.8
 pycodestyle==2.9.1
 pydantic==1.10.2
+PyMySQL==1.0.2
 pypika-tortoise==0.1.6
 python-dotenv==0.21.0
 python-jose==3.3.0
