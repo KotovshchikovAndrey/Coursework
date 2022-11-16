@@ -5,6 +5,26 @@ import ApiError from '../../utils/exceptions/api_errors'
 import { Validator } from './interfaces'
 
 
+class DonutListValidator implements Validator {
+    validate(req: Request, res: Response, next: NextFunction) {
+        this.validateQueryParams(req)
+        next()
+    }
+
+    private validateQueryParams(req: Request) {
+        const page = req.query.page
+        const pageNumber = Number(page)
+        if (pageNumber.toString() !== page) {
+            req.query.page = '1'
+        } else if (pageNumber < 1) {
+            req.query.page = '1'
+        } else {
+            req.query.page = pageNumber.toString()
+        }
+    }
+}
+
+
 class DonutDetailValidator implements Validator {
     private errorsArray: Array<string>
 
@@ -22,8 +42,9 @@ class DonutDetailValidator implements Validator {
     }
 
     private validateId(id: string) {
-        if (isNaN(parseInt(id))) {
-            this.errorsArray.push('id должен быть числом!')
+        const intId = parseInt(id)
+        if (intId.toString() !== id) {
+            this.errorsArray.push('id должен быть целым числом!')
         }
     }
 }
@@ -68,7 +89,7 @@ class DonutCreationValidator implements Validator {
 }
 
 
-type donutValidator = 'CreationValidator' | 'DetailValidator'
+type donutValidator = 'CreationValidator' | 'DetailValidator' | 'ListValidator'
 
 export default function createDonutValidator(validatorName: donutValidator): Validator {
     switch (validatorName) {
@@ -76,5 +97,7 @@ export default function createDonutValidator(validatorName: donutValidator): Val
             return new DonutDetailValidator()
         case 'CreationValidator':
             return new DonutCreationValidator()
+        case 'ListValidator':
+            return new DonutListValidator()
     }
 }

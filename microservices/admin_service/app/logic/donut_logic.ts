@@ -3,6 +3,8 @@ import { Donut } from '../db/interfaces'
 import { createDonutDto } from '../dto/donut_dto'
 import ApiError from '../utils/exceptions/api_errors'
 
+const pageLimit = 2
+
 
 export default class DonutService {
     private donutRepository: Repository<Donut>
@@ -11,8 +13,18 @@ export default class DonutService {
         this.donutRepository = donutRepository
     }
 
-    async getAllDonuts() {
-        return await this.donutRepository.find()
+    async getAllDonuts(pageNumber: string) {
+        const offset = parseInt(pageNumber) * pageLimit - pageLimit
+        const donutsList = await this.donutRepository.find({ take: pageLimit, skip: offset })
+
+        return donutsList
+    }
+
+    async getPageCounts() {
+        const donutCounts = await this.donutRepository.count()
+        const pageCounts = Math.ceil(donutCounts / pageLimit)
+
+        return pageCounts
     }
 
     async getDetailDonut(donutId: string) {
