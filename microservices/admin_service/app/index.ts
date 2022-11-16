@@ -1,6 +1,6 @@
 import * as path from 'path'
 import dotenv from 'dotenv'
-import ApiErrorMiddleware from './utils/exceptions/errors_middleware'
+import ApiErrorHandler from './utils/exceptions/error_handler'
 
 dotenv.config({ path: path.join(__dirname, '..', 'app', '.env') })
 
@@ -16,7 +16,7 @@ app.use(express.json())
 app.use('/api/v1/admin', adminRouter)
 
 // Кастомный обработчик ошибок 
-app.use(ApiErrorMiddleware)
+app.use(ApiErrorHandler)
 
 // Запускает сервер и подключается к базе данных
 const runServer = async () => {

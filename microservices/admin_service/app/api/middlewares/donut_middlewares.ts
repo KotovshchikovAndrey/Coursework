@@ -1,16 +1,35 @@
 import { Request, Response, NextFunction } from 'express'
+import { ParamsDictionary } from 'express-serve-static-core'
+import { ParsedQs } from 'qs'
 import ApiError from '../../utils/exceptions/api_errors'
+import { Validator } from './interfaces'
 
-interface Validator {
-    validate(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): void
+
+class DonutDetailValidator implements Validator {
+    private errorsArray: Array<string>
+
+    constructor() {
+        this.errorsArray = []
+    }
+
+    validate(req: Request, res: Response, next: NextFunction) {
+        this.validateId(req.params.id)
+        if (this.errorsArray.length !== 0) {
+            return next(ApiError.badRequest("Передан некорректный id!", this.errorsArray))
+        }
+
+        next()
+    }
+
+    private validateId(id: string) {
+        if (isNaN(parseInt(id))) {
+            this.errorsArray.push('id должен быть числом!')
+        }
+    }
 }
 
 
-class DonutsRequestValidator implements Validator {
+class DonutCreationValidator implements Validator {
     private errorsArray: Array<string>
 
     constructor() {
@@ -22,11 +41,10 @@ class DonutsRequestValidator implements Validator {
         res: Response,
         next: NextFunction
     ) {
-        console.log(this)
         this.validateName(req.body.name)
         this.validatePrice(req.body.price)
         if (this.errorsArray.length !== 0) {
-            return next(ApiError.badRequest("Не заполнены обязательные поля!", this.errorsArray))
+            return next(ApiError.badRequest("Введены невалидные данные!", this.errorsArray))
         }
 
         next()
@@ -50,11 +68,13 @@ class DonutsRequestValidator implements Validator {
 }
 
 
-type validator = 'RequestValidator'
+type donutValidator = 'CreationValidator' | 'DetailValidator'
 
-export default function addValidator(validatorName: validator): Validator {
+export default function createDonutValidator(validatorName: donutValidator): Validator {
     switch (validatorName) {
-        case 'RequestValidator':
-            return new DonutsRequestValidator()
+        case 'DetailValidator':
+            return new DonutDetailValidator()
+        case 'CreationValidator':
+            return new DonutCreationValidator()
     }
 }

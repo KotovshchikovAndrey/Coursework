@@ -4,8 +4,8 @@ export default class ApiError extends Error {
     public details: Array<string>
 
     constructor(
-        status: number, 
-        message: string, 
+        status: number,
+        message: string,
         details: Array<string>
     ) {
         super()
@@ -20,6 +20,10 @@ export default class ApiError extends Error {
 
     static forbidden(message: string, details: Array<string> = []) {
         return new ApiError(403, message, details)
+    }
+
+    static notFound(message: string, details: Array<string> = []) {
+        return new ApiError(404, message, details)
     }
 
     static internal(message: string, details: Array<string> = []) {

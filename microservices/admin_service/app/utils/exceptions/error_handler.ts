@@ -2,7 +2,7 @@ import { ErrorRequestHandler, Request, Response, NextFunction } from 'express'
 import ApiError from './api_errors'
 
 
-export default function ApiErrorMiddleware(
+export default function ApiErrorHandler(
     err: ErrorRequestHandler,
     req: Request,
     res: Response,

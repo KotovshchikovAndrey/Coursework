@@ -1,16 +1,24 @@
 import express, { Request, Response, NextFunction } from 'express'
 import DonutController from '../controllers/donut_controller'
-import addValidator from '../../middlewares/donut_middlewares'
+import createDonutValidator from '../../middlewares/donut_middlewares'
 
 const donutRouter = express.Router()
 
 donutRouter
-    .get('/all', DonutController.getAllDonuts)
+    .all('/all', DonutController.getAllDonuts)
+    .get(
+        '/:id',
+        (req: Request, res: Response, next: NextFunction) => {
+            const donutValidator = createDonutValidator('DetailValidator')
+            donutValidator.validate(req, res, next)
+        },
+        DonutController.getDetailDonut
+    )
     .post(
         '/create',
         (req: Request, res: Response, next: NextFunction) => {
-            const validator = addValidator('RequestValidator')
-            validator.validate(req, res, next)
+            const donutValidator = createDonutValidator('CreationValidator')
+            donutValidator.validate(req, res, next)
         },
         DonutController.createDonut
     )
