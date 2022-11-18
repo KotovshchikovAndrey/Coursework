@@ -26,7 +26,7 @@ export class IngredientModel implements Ingredient {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ type: 'varchar', length: 50, nullable: false })
+    @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
     name: string
 
     @ManyToOne(() => DonutModel, (donut) => donut.ingredients)

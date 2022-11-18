@@ -3,6 +3,7 @@ export interface Donut {
     name: string
     description: string
     price: number
+    ingredients: Ingredient[]
 }
 
 export interface Ingredient {

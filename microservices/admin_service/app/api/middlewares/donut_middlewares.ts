@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import { ParamsDictionary } from 'express-serve-static-core'
-import { ParsedQs } from 'qs'
 import ApiError from '../../utils/exceptions/api_errors'
 import { Validator } from './interfaces'
 
@@ -74,8 +72,6 @@ class DonutCreationValidator implements Validator {
     private validateName(name: unknown) {
         if (typeof name === 'undefined') {
             this.errorsArray.push('Введите название пончика!')
-        } else if (typeof name !== 'string') {
-            this.errorsArray.push('Название пончика должны быть строкой!')
         }
     }
 

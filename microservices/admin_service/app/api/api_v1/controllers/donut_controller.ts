@@ -7,11 +7,11 @@ export default class DonutController {
     static async getAllDonuts(req: Request, res: Response, next: NextFunction) {
         const donutService = new DonutService(donutSqlRepository)
         const donutsList = await donutService.getAllDonuts(req.query.page as string)
-        const pageCounts = await donutService.getPageCounts()
+        const pageCount = await donutService.getPageCount()
 
-        return res.json({
+        return res.status(200).json({
             donuts: donutsList,
-            page_counts: pageCounts
+            page_count: pageCount
         })
     }
 
