@@ -1,6 +1,6 @@
 import { Repository, In } from 'typeorm'
 import { Ingredient } from '../db/interfaces'
-import { createIngredientDto } from '../dto/ingredient_dto'
+import { CreateIngredientDto } from '../dto/ingredient_dto'
 import ApiError from '../utils/exceptions/api_errors'
 
 const pageLimit = 2
@@ -27,7 +27,7 @@ export default class IngredientService {
         return pageCount
     }
 
-    async createIngredient(newIngredientData: createIngredientDto) {
+    async createIngredient(newIngredientData: CreateIngredientDto) {
         const { name } = newIngredientData
         const isIngredientExists = await this.ingredientRepository.count({
             where: {

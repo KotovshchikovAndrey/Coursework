@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
+import { ParamsDictionary } from 'express-serve-static-core'
+import { ParsedQs } from 'qs'
 import ApiError from '../../utils/exceptions/api_errors'
 import { Validator } from './interfaces'
 
@@ -79,6 +81,30 @@ class DonutCreationValidator implements Validator {
         if (typeof price === 'undefined') {
             this.errorsArray.push('Введите название пончика!')
         } else if (typeof price !== 'number') {
+            this.errorsArray.push('Цена должна быть числом!')
+        }
+    }
+}
+
+
+class DonutUpdateValidator implements Validator {
+    private errorsArray: Array<string>
+
+    constructor() {
+        this.errorsArray = []
+    }
+
+    validate(req: Request, res: Response, next: NextFunction) {
+        this.validatePrice
+        if (this.errorsArray.length !== 0) {
+            return next(ApiError.badRequest('Введены некорректные данные!', this.errorsArray))
+        }
+
+        next()
+    }
+
+    private validatePrice(price: unknown) {
+        if (typeof price !== 'undefined' && typeof price !== 'number') {
             this.errorsArray.push('Цена должна быть числом!')
         }
     }

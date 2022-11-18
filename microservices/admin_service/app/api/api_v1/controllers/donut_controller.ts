@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { donutSqlRepository } from '../../../db/repositories'
 import DonutService from '../../../logic/donut_logic'
+import ApiError from '../../../utils/exceptions/api_errors'
 
 
 export default class DonutController {
@@ -34,8 +35,21 @@ export default class DonutController {
         })
     }
 
-    static async updateDonut(req: Request, res: Response) {
+    static async updateDonut(req: Request, res: Response, next: NextFunction) {
+        const donutService = new DonutService(donutSqlRepository)
+        try {
+            const donut = await donutService.partialUpdateDonut(
+                req.params.id,
+                req.body
+            )
 
+            return res.status(200).json({
+                message: 'Пончик Обновлен!',
+                donut: donut
+            })
+        } catch (e) {
+            return next(e)
+        }
     }
 
     static async deleteDonut(req: Request, res: Response) {

@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm'
 import { Donut } from '../db/interfaces'
-import { createDonutDto } from '../dto/donut_dto'
+import { CreateDonutDto, UpdateDonutDto } from '../dto/donut_dto'
 import ApiError from '../utils/exceptions/api_errors'
 import { ingredientSqlRepository } from '../db/repositories'
 import IngredientService from './ingredient_logic'
@@ -38,7 +38,7 @@ export default class DonutService {
         return donut
     }
 
-    async createDonut(newDonutData: createDonutDto) {
+    async createDonut(newDonutData: CreateDonutDto) {
         const { name, description, price, ingredientsNames } = newDonutData
         const newDonut = this.donutRepository.create({
             name: name,
@@ -53,5 +53,28 @@ export default class DonutService {
         }
 
         await this.donutRepository.save(newDonut)
+    }
+
+    async partialUpdateDonut(donutId: string, updateDonutData: UpdateDonutDto) {
+        const donutForUpdate = await this.donutRepository.findOne({ where: { id: parseInt(donutId) } })
+        if (donutForUpdate === null) {
+            throw ApiError.notFound('Запись не найдена!')
+        }
+
+        const dataForUpdate = new Map<string, unknown>()
+        Object.keys(updateDonutData).forEach((field) => {
+            const valueForUpdate = updateDonutData[field as keyof UpdateDonutDto]
+            if (typeof valueForUpdate !== 'undefined' && field !== 'ingredientsNames')
+                dataForUpdate.set(field, valueForUpdate)
+        })
+
+        const updatedDonut = this.donutRepository.merge(donutForUpdate, dataForUpdate as UpdateDonutDto)
+        if (typeof updateDonutData.ingredientsNames !== 'undefined') {
+            const ingredientService = new IngredientService(ingredientSqlRepository)
+            const ingredients = await ingredientService.findIngredientsByName(updateDonutData.ingredientsNames)
+            updatedDonut.ingredients = ingredients
+        }
+
+        return await this.donutRepository.save(donutForUpdate)
     }
 }

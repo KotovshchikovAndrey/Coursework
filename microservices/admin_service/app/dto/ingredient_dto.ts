@@ -1,3 +1,3 @@
-export interface createIngredientDto {
+export interface CreateIngredientDto {
     name: string
 }

@@ -3,17 +3,17 @@ import { Validator } from './interfaces'
 import ApiError from '../../utils/exceptions/api_errors'
 
 
-class CreationIngredientValidator implements Validator {
-    private errorsList: Array<string>
+class IngredientCreationValidator implements Validator {
+    private errorsArray: Array<string>
 
     constructor() {
-        this.errorsList = []
+        this.errorsArray = []
     }
 
     validate(req: Request, res: Response, next: NextFunction) {
         this.validateName(req.body.name)
-        if (this.errorsList.length !== 0) {
-            return next(ApiError.badRequest('Введены невалидные данные!', this.errorsList))
+        if (this.errorsArray.length !== 0) {
+            return next(ApiError.badRequest('Введены невалидные данные!', this.errorsArray))
         }
 
         next()
@@ -21,7 +21,7 @@ class CreationIngredientValidator implements Validator {
 
     private validateName(name: unknown) {
         if (typeof name === 'undefined') {
-            this.errorsList.push('Заполните название инградиента!')
+            this.errorsArray.push('Заполните название инградиента!')
         }
     }
 }
@@ -32,6 +32,6 @@ type ingredientValidator = 'CreationValidator'
 export default function createIngredientValidator(validatorName: ingredientValidator): Validator {
     switch (validatorName) {
         case 'CreationValidator':
-            return new CreationIngredientValidator()
+            return new IngredientCreationValidator()
     }
 }

@@ -25,8 +25,8 @@ donutRouter
             createDonutValidator('CreationValidator').validate(req, res, next)
         },
         DonutController.createDonut
-    ).put(
-        '/update:id',
+    ).patch(
+        '/update/:id',
         (req: Request, res: Response, next: NextFunction) => {
             createDonutValidator('DetailValidator').validate(req, res, next)
         },

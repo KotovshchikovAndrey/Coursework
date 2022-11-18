@@ -19,12 +19,11 @@ export default class IngredientController {
         const ingredientService = new IngredientService(ingredientSqlRepository)
         try {
             await ingredientService.createIngredient(req.body)
+            return res.status(201).json({
+                message: 'Ингредиент создан!'
+            })
         } catch (e) {
             return next(e)
         }
-
-        return res.status(201).json({
-            message: 'Ингредиент создан!'
-        })
     }
 }
