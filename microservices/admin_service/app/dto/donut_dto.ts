@@ -10,6 +10,6 @@ export interface CreateDonutDto {
 export interface UpdateDonutDto {
     name?: string,
     description?: string,
-    price?: number
+    price?: number,
     ingredientsNames?: string[]
 }
