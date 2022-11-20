@@ -31,7 +31,7 @@ class AuthService:
 
         created_user = await self._user_service.create_user(user_data)
         access_token, refresh_token = await self._create_tokens_for_user(
-            payload={'user_id': created_user.id, 'email': created_user.email})
+            payload={'user_id': created_user.id, 'name': created_user.name})
 
         return UserResponseSchema(**created_user.dict()), access_token, refresh_token
 
@@ -39,10 +39,10 @@ class AuthService:
         """Метод, инкапсулирующий логику авторизации и аутентификации пользователя"""
         user = await self._user_service.authenticate_user(user_data)
         if user is None:
-            raise ApiError.unauthorized(message='Неверный email или пароль!')
+            raise ApiError.unauthorized(message='Неверный логин или пароль!')
 
         access_token, refresh_token = await self._create_tokens_for_user(
-            payload={'user_id': user.id, 'email': user.email})
+            payload={'user_id': user.id, 'name': user.name})
 
         return access_token, refresh_token
 

@@ -15,8 +15,9 @@ class UserService:
     async def check_user_create_data(self, user_data: dict) -> None:
         """Проверяет введенные данные и вызывает exception, если данные невалидны"""
         errors_list = []
-        if await self._repository.is_exists(email=user_data['email']):
-            errors_list.append('Данный email уже занят кем то другим')
+        if await self._repository.is_exists(name=user_data['name']):
+            errors_list.append(
+                'Данное имя уже занято кем то другим, придумайте другое')
 
         if errors_list:
             raise ApiError.bad_request(
@@ -29,8 +30,6 @@ class UserService:
 
         created_user = await self._repository.create(
             name=user_data['name'],
-            surname=user_data['surname'],
-            email=user_data['email'],
             password_hash=hashed_password
         )
 
@@ -38,7 +37,7 @@ class UserService:
 
     async def authenticate_user(self, user_data: dict) -> tp.Optional[UserSchema]:
         """Аутентификация пользователя в системе"""
-        user = await self._repository.get_by_params(email=user_data['email'])
+        user = await self._repository.get_by_params(name=user_data['name'])
         if user is not None:
             is_correct_password = self._check_password_hash(
                 password=user_data['password'],
