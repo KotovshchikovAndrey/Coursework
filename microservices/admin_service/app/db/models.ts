@@ -26,6 +26,9 @@ export class IngredientModel implements Ingredient {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column({ type: 'varchar', length: 255, nullable: true, unique: true })
+    image: string
+
     @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
     name: string
 

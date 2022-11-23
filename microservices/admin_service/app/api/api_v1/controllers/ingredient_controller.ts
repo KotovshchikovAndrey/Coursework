@@ -18,7 +18,7 @@ export default class IngredientController {
     static async createIngredient(req: Request, res: Response, next: NextFunction) {
         const ingredientService = new IngredientService(ingredientSqlRepository)
         try {
-            await ingredientService.createIngredient(req.body)
+            await ingredientService.createIngredient(req.files, req.body)
             return res.status(201).json({
                 message: 'Ингредиент создан!'
             })

@@ -1,5 +1,3 @@
-import { Ingredient } from '../db/interfaces'
-
 export interface CreateDonutDto {
     name: string,
     description?: string,

@@ -2,6 +2,8 @@ import { Repository, In } from 'typeorm'
 import { Ingredient } from '../db/interfaces'
 import { CreateIngredientDto } from '../dto/ingredient_dto'
 import ApiError from '../utils/exceptions/api_errors'
+import fileUpload from 'express-fileupload'
+import FileUploader from '../utils/files/file_uploader'
 
 const pageLimit = 2
 
@@ -27,7 +29,10 @@ export default class IngredientService {
         return pageCount
     }
 
-    async createIngredient(newIngredientData: CreateIngredientDto) {
+    async createIngredient(
+        files: fileUpload.FileArray | undefined | null,
+        newIngredientData: CreateIngredientDto
+    ) {
         const { name } = newIngredientData
         const isIngredientExists = await this.ingredientRepository.count({
             where: {
@@ -43,6 +48,13 @@ export default class IngredientService {
         }
 
         const newIngredient = this.ingredientRepository.create(newIngredientData)
+        const imageFile = files?.image
+        if (imageFile) {
+            const fileUploader = new FileUploader()
+            const imageName = await fileUploader.upload(imageFile as fileUpload.UploadedFile)
+            newIngredient.image = imageName
+        }
+
         await this.ingredientRepository.save(newIngredient)
     }
 
