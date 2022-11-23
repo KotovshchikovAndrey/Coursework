@@ -25,8 +25,8 @@
 
   1. Метод: POST
   2. Формат: Json
-  3. Обязательные параметры: name, surname, email, password, confirm_password
-  4. Необязательные параметры: patronymic
+  3. Обязательные параметры: name, surname, email, password, confirm_password (AUTH_SERVICE 2.0 - name, password, confirm_password)
+  4. Необязательные параметры: patronymic (AUTH_SERVICE 2.0 - нет)
 
 Возможные ответы:
   1. Успех: 
@@ -51,8 +51,8 @@
 
   1. Метод: POST
   2. Формат: Json
-  3. Обязательные параметры: email, password
-  4. Необязательные параметры: patronymic, name, surname
+  3. Обязательные параметры: email, password (AUTH_SERVICE 2.0 - name, password)
+  4. Необязательные параметры: patronymic, name, surname (AUTH_SERVICE 2.0 - нет) 
 
 Возможные ответы:
   1. Успех:
