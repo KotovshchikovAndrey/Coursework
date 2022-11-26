@@ -87,30 +87,6 @@ class DonutCreationValidator implements Validator {
 }
 
 
-class DonutUpdateValidator implements Validator {
-    private errorsArray: Array<string>
-
-    constructor() {
-        this.errorsArray = []
-    }
-
-    validate(req: Request, res: Response, next: NextFunction) {
-        this.validatePrice
-        if (this.errorsArray.length !== 0) {
-            return next(ApiError.badRequest('Введены некорректные данные!', this.errorsArray))
-        }
-
-        next()
-    }
-
-    private validatePrice(price: unknown) {
-        if (typeof price !== 'undefined' && typeof price !== 'number') {
-            this.errorsArray.push('Цена должна быть числом!')
-        }
-    }
-}
-
-
 type donutValidator = 'CreationValidator' | 'DetailValidator' | 'ListValidator'
 
 export default function createDonutValidator(validatorName: donutValidator): Validator {

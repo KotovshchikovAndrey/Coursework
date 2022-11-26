@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm'
 import { Donut, Ingredient } from './interfaces'
 
 
@@ -16,7 +16,10 @@ export class DonutModel implements Donut {
     @Column({ type: 'integer', nullable: false })
     price: number
 
-    @OneToMany(() => IngredientModel, (ingredient) => ingredient.donut)
+    @ManyToMany(() => IngredientModel, {
+        cascade: false,
+    })
+    @JoinTable()
     ingredients: IngredientModel[]
 }
 
@@ -31,7 +34,4 @@ export class IngredientModel implements Ingredient {
 
     @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
     name: string
-
-    @ManyToOne(() => DonutModel, (donut) => donut.ingredients)
-    donut: DonutModel
 }

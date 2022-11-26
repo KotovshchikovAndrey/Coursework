@@ -1,6 +1,6 @@
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { Donut, Ingredient } from '../db/interfaces'
-import { CreateDonutDto, UpdateDonutDto } from '../dto/donut_dto'
+import { CreateDonutDto, RemoveDonutIngredientDto, UpdateDonutDto } from '../dto/donut_dto'
 import ApiError from '../utils/exceptions/api_errors'
 import { ingredientSqlRepository } from '../db/repositories'
 import IngredientService from './ingredient_logic'
@@ -74,6 +74,35 @@ export default class DonutService {
         const updatedDonut = await this.donutRepository.save(donutInstanceForUpdate)
 
         return updatedDonut
+    }
+
+    async deleteDonut(donutId: string) {
+        await this.donutRepository.delete({
+            id: parseInt(donutId)
+        })
+    }
+
+    async deleteIngredient(donutId: string, removeDonutIngredientData: RemoveDonutIngredientDto) {
+        const { ingredientsNames } = removeDonutIngredientData
+        if (!ingredientsNames) {
+            return
+        }
+
+        const donutInstance = await this.donutRepository.findOne(
+            {
+                where: { id: parseInt(donutId) },
+                relations: { ingredients: true }
+            }
+        )
+        if (donutInstance === null) {
+            throw ApiError.notFound('Запись не найдена!')
+        }
+
+        donutInstance.ingredients = donutInstance.ingredients.filter((ingredient) => {
+            return !ingredientsNames.includes(ingredient.name)
+        })
+
+        await this.donutRepository.save(donutInstance)
     }
 
     private async setIngregientsForDonut(donutInstance: Donut, ingredientsNames: string[]) {

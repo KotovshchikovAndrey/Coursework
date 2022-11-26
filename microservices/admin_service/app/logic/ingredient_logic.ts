@@ -58,6 +58,12 @@ export default class IngredientService {
         await this.ingredientRepository.save(newIngredient)
     }
 
+    async deleteIngredient(ingredientId: string) {
+        await this.ingredientRepository.delete({
+            id: parseInt(ingredientId)
+        })
+    }
+
     async findIngredientsByName(names: string[]) {
         const ingredients = await this.ingredientRepository.find({
             where: {

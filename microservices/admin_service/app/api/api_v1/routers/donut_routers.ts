@@ -20,17 +20,32 @@ donutRouter
         DonutController.getDetailDonut
     )
     .post(
-        '/create',
+        '/',
         (req: Request, res: Response, next: NextFunction) => {
             createDonutValidator('CreationValidator').validate(req, res, next)
         },
         DonutController.createDonut
-    ).patch(
-        '/update/:id',
+    )
+    .patch(
+        '/:id',
         (req: Request, res: Response, next: NextFunction) => {
             createDonutValidator('DetailValidator').validate(req, res, next)
         },
         DonutController.updateDonut
+    )
+    .delete(
+        '/:id',
+        (req: Request, res: Response, next: NextFunction) => {
+            createDonutValidator('DetailValidator').validate(req, res, next)
+        },
+        DonutController.deleteDonut
+    )
+    .delete(
+        '/ingredient.remove/:id',
+        (req: Request, res: Response, next: NextFunction) => {
+            createDonutValidator('DetailValidator').validate(req, res, next)
+        },
+        DonutController.deleteIngredient
     )
 
 export default donutRouter

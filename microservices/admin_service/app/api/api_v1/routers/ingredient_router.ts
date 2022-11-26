@@ -7,11 +7,18 @@ const ingredientRouter = express.Router()
 ingredientRouter
     .all('/all', IngredientController.getIngredientsList)
     .post(
-        '/create',
+        '/',
         (req: Request, res: Response, next: NextFunction) => {
             createIngredientValidator('CreationValidator').validate(req, res, next)
         },
         IngredientController.createIngredient
+    )
+    .delete(
+        '/:id',
+        (req: Request, res: Response, next: NextFunction) => {
+            createIngredientValidator('DetailValidator').validate(req, res, next)
+        },
+        IngredientController.deleteIngredient
     )
 
 export default ingredientRouter

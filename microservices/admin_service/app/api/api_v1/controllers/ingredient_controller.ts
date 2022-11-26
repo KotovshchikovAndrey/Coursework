@@ -26,4 +26,13 @@ export default class IngredientController {
             return next(e)
         }
     }
+
+    static async deleteIngredient(req: Request, res: Response) {
+        const ingredientService = new IngredientService(ingredientSqlRepository)
+        await ingredientService.deleteIngredient(req.params.id)
+
+        return res.status(200).json({
+            message: 'Ингредиент удален!'
+        })
+    }
 }

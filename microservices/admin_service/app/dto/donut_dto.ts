@@ -11,3 +11,7 @@ export interface UpdateDonutDto {
     price?: number,
     ingredientsNames?: string[]
 }
+
+export interface RemoveDonutIngredientDto {
+    ingredientsNames?: string[]
+}
