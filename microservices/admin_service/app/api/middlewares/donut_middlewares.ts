@@ -35,7 +35,7 @@ class DonutDetailValidator implements Validator {
     validate(req: Request, res: Response, next: NextFunction) {
         this.validateId(req.params.id)
         if (this.errorsArray.length !== 0) {
-            return next(ApiError.badRequest("Передан некорректный id!", this.errorsArray))
+            return next(ApiError.badRequest('Передан некорректный id!', this.errorsArray))
         }
 
         next()
@@ -65,7 +65,7 @@ class DonutCreationValidator implements Validator {
         this.validateName(req.body.name)
         this.validatePrice(req.body.price)
         if (this.errorsArray.length !== 0) {
-            return next(ApiError.badRequest("Введены невалидные данные!", this.errorsArray))
+            return next(ApiError.badRequest('Введены невалидные данные!', this.errorsArray))
         }
 
         next()
@@ -79,7 +79,7 @@ class DonutCreationValidator implements Validator {
 
     private validatePrice(price: unknown) {
         if (typeof price === 'undefined') {
-            this.errorsArray.push('Введите название пончика!')
+            this.errorsArray.push('Введите цену пончика!')
         } else if (typeof price !== 'number') {
             this.errorsArray.push('Цена должна быть числом!')
         }
@@ -87,7 +87,41 @@ class DonutCreationValidator implements Validator {
 }
 
 
-type donutValidator = 'CreationValidator' | 'DetailValidator' | 'ListValidator'
+class DonutUpdateValidator implements Validator {
+    private errorsArray: Array<string>
+
+    constructor() {
+        this.errorsArray = []
+    }
+
+    validate(req: Request, res: Response, next: NextFunction) {
+        this.validateId(req.params.id)
+        this.validatePrice(req.body.price)
+        if (this.errorsArray.length !== 0) {
+            return next(ApiError.badRequest('Введены невалидные данные!', this.errorsArray))
+        }
+
+        next()
+    }
+
+    private validateId(id: string) {
+        const intId = parseInt(id)
+        if (intId.toString() !== id) {
+            this.errorsArray.push('id должен быть целым числом!')
+        }
+    }
+
+    private validatePrice(price: unknown) {
+        if (typeof price === 'undefined') {
+            this.errorsArray.push('Введите цену пончика!')
+        } else if (typeof price !== 'number') {
+            this.errorsArray.push('Цена должна быть числом!')
+        }
+    }
+}
+
+
+type donutValidator = 'UpdateValidator' | 'CreationValidator' | 'DetailValidator' | 'ListValidator'
 
 export default function createDonutValidator(validatorName: donutValidator): Validator {
     switch (validatorName) {
@@ -95,6 +129,8 @@ export default function createDonutValidator(validatorName: donutValidator): Val
             return new DonutDetailValidator()
         case 'CreationValidator':
             return new DonutCreationValidator()
+        case 'UpdateValidator':
+            return new DonutUpdateValidator()
         case 'ListValidator':
             return new DonutListValidator()
     }

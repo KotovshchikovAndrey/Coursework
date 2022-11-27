@@ -5,7 +5,13 @@ import createIngredientValidator from '../../middlewares/ingredient_middlewares'
 const ingredientRouter = express.Router()
 
 ingredientRouter
-    .all('/all', IngredientController.getIngredientsList)
+    .all(
+        '/all',
+        (req: Request, res: Response, next: NextFunction) => {
+            createIngredientValidator('ListValidator').validate(req, res, next)
+        },
+        IngredientController.getIngredientsList
+    )
     .post(
         '/',
         (req: Request, res: Response, next: NextFunction) => {

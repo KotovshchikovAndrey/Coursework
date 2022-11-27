@@ -33,7 +33,7 @@ donutRouter
     .patch(
         '/:id',
         (req: Request, res: Response, next: NextFunction) => {
-            createDonutValidator('DetailValidator').validate(req, res, next)
+            createDonutValidator('UpdateValidator').validate(req, res, next)
         },
         DonutController.updateDonut
     )

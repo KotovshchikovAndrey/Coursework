@@ -5,6 +5,25 @@ import fileUpload from 'express-fileupload'
 import * as path from 'path'
 
 
+class IngredientListValidator implements Validator {
+    validate(req: Request, res: Response, next: NextFunction) {
+        this.validateQueryParams(req)
+        next()
+    }
+
+    private validateQueryParams(req: Request) {
+        const page = req.query.page
+        const pageNumber = Number(page)
+        if (pageNumber.toString() !== page) {
+            req.query.page = '1'
+        } else if (pageNumber < 1) {
+            req.query.page = '1'
+        } else {
+            req.query.page = pageNumber.toString()
+        }
+    }
+}
+
 class IngredientDetailValidator implements Validator {
     private errorsArray: Array<string>
 
@@ -68,10 +87,13 @@ class IngredientCreationValidator implements Validator {
     }
 }
 
-type ingredientValidator = 'DetailValidator' | 'CreationValidator'
+
+type ingredientValidator = 'ListValidator' | 'DetailValidator' | 'CreationValidator'
 
 export default function createIngredientValidator(validatorName: ingredientValidator): Validator {
     switch (validatorName) {
+        case 'ListValidator':
+            return new IngredientListValidator()
         case 'DetailValidator':
             return new IngredientDetailValidator()
         case 'CreationValidator':

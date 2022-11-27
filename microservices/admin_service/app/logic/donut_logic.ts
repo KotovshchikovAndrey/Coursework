@@ -16,7 +16,11 @@ export default class DonutService {
     }
 
     async getFullDonutsListFromDb() {
-        return await this.donutRepository.find()
+        return await this.donutRepository.find({
+            relations: {
+                ingredients: true
+            }
+        })
     }
 
     async getAllDonuts(pageNumber: string) {
