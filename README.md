@@ -196,7 +196,7 @@ name - должен быть уникальным (2 одинаковых инг
 
 10. УДАЛЕНИЕ ИНГРЕДИЕНТА У ПОНЧИКА
 ![image](https://user-images.githubusercontent.com/91110557/204156860-b83b8434-0f0b-4e82-926d-cddaf31f419b.png)
-
+/6 - id пончика, у которого нужно удалить ингредиент
 
 до
 ![image](https://user-images.githubusercontent.com/91110557/204156789-b0fe7d99-d977-4041-8d57-8d80ca7e1ff5.png)
