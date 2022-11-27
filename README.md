@@ -135,12 +135,12 @@
 Пример Некорректного ответа (бага, ошибки сервера)
 ![image](https://user-images.githubusercontent.com/91110557/204155218-c40d968b-a6a7-4137-97bb-cba43adc080b.png)
 
-1. Получение ВСЕХ пончиков
+1. ПОЛУЧЕНИЕ ВСЕХ ПОНЧИКОВ
  
 Пример корректного запроса/ответа
 ![image](https://user-images.githubusercontent.com/91110557/204153576-093ca721-9ea7-4017-b8c4-119589d8ec6c.png)
 
-2. Получение 1 пончика по id
+2. ПОЛУЧЕНИЕ 1 ПОНЧИКА ПО ID
 
 ![image](https://user-images.githubusercontent.com/91110557/204155323-7f8408d0-7908-4314-b354-ee0d6f40678d.png)
 
@@ -149,6 +149,67 @@
 
 Если id некорректный
 ![image](https://user-images.githubusercontent.com/91110557/204155419-f4181c06-820e-409a-9c7d-3813d2187d4b.png)
+
+3. ПОЛУЧЕНИЕ НЕСКОЛЬКИХ ПОНЧИКОВ (В ДАННЫЙ МОМЕНТ УСТАНОВЛЕН ЛИМИТ 2 ЗАПИСИ)
+
+![image](https://user-images.githubusercontent.com/91110557/204155568-d06fb14b-9d5d-44d6-864e-d1e5c59d5a94.png)
+
+page_count - количество станиц (Количество всех записей / лимит (2 записи), округленное в большую сторону)
+
+Можно передать параметр page (текущую страницу)
+![image](https://user-images.githubusercontent.com/91110557/204155691-115100a6-4e07-4d92-a7dc-09eb3805c4e8.png)
+
+4. СОЗДАНИЕ ПОНЧИКА
+![image](https://user-images.githubusercontent.com/91110557/204155712-2639ab89-ceb6-4aa5-9047-376bc57e96da.png)
+
+description - необязательное поле
+ingredientsNames - уникальные имена ингредиентов пончика (если из нет в базе данных, то они не будут добавлены к пончику (ошибки не будет)) 
+
+5. ОБНОВЛЕНИЕ ПОНЧИКА
+![image](https://user-images.githubusercontent.com/91110557/204155863-8127a960-aec7-4637-80e2-8355b3a7a02f.png)
+
+все тоже самое, что у create, только все поля необязательны.
+
+если запись не найдена
+![image](https://user-images.githubusercontent.com/91110557/204155894-3a6644bf-43a2-4a27-a354-138f46057ed2.png)
+
+6. УДАЛЕНИЕ ПОНЧИКА
+![image](https://user-images.githubusercontent.com/91110557/204156119-cad58e6c-2a2c-4796-bf6c-695b25560ee3.png)
+
+7. ПОЛУЧЕНИЕ ВСЕХ ИНГРЕДИЕНТОВ
+
+![image](https://user-images.githubusercontent.com/91110557/204156297-a6a9ddb3-467e-43b8-a7ee-dba1d838dec0.png)
+
+все аналогично получению пончиков
+
+8. СОЗДАНИЕ ИНГЕДИЕНТА
+![image](https://user-images.githubusercontent.com/91110557/204156360-704b53c0-ef9b-4939-8447-b7bd5ab8b515.png)
+
+ВНИМАНИЕ! на этот endpoint нужно отправлять НЕ json, а fotm-data с media файломи!
+
+image - необязательное поле
+name - должен быть уникальным (2 одинаковых ингредиентов быть не должно)
+![image](https://user-images.githubusercontent.com/91110557/204156539-f6d97d26-dee4-48d7-8f2c-55b8688531a1.png)
+
+9. УДАЛЕНИЕ ИНГРЕДИЕНТА
+![image](https://user-images.githubusercontent.com/91110557/204156576-f298da8c-95ce-4816-baf6-b7c3f8f6214e.png)
+
+10. УДАЛЕНИЕ ИНГРЕДИЕНТА У ПОНЧИКА
+![image](https://user-images.githubusercontent.com/91110557/204156860-b83b8434-0f0b-4e82-926d-cddaf31f419b.png)
+
+
+до
+![image](https://user-images.githubusercontent.com/91110557/204156789-b0fe7d99-d977-4041-8d57-8d80ca7e1ff5.png)
+
+после
+![image](https://user-images.githubusercontent.com/91110557/204156872-ff5ca3c7-7fec-4945-8303-d4a13f356c68.png)
+
+
+
+
+
+
+
 
 
 
