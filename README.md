@@ -113,4 +113,42 @@
   3. Ошибка сервера (БАГ):
   status = 500, content = message, details
   ![image](https://user-images.githubusercontent.com/91110557/201499990-c02129fc-82ed-4526-81de-6c4de1684755.png)
-   
+  
+  
+  
+  
+  # Admin-Service
+  
+ Чтобы запустить проект нужно:
+ 1. установленный Node js
+ 2. База данных PostgreSql
+ 
+ Чтобы развернуть проект:
+ 1. В корневой папке (где папка /app и файлы .json) запустить команду npm install
+ 2. Запустить сервер при помощи команды npm run dev (в этой же папке)
+ 
+ Тестировать запросы нужно по адресу http(s):{HOST}:3000/api/v1/admin/{ROOT ENDPOINT}/{CHILD ENDPOINT}
+ 
+ ROOT ENDPOINT - donut (для пончиков) или ingredient (для ингедиентов к пончикам)
+ CHILD ENDPOINT - для donut (full, all, ingredients.remove), для ingredient (только all)
+ 
+Пример Некорректного ответа (бага, ошибки сервера)
+![image](https://user-images.githubusercontent.com/91110557/204155218-c40d968b-a6a7-4137-97bb-cba43adc080b.png)
+
+1. Получение ВСЕХ пончиков
+ 
+Пример корректного запроса/ответа
+![image](https://user-images.githubusercontent.com/91110557/204153576-093ca721-9ea7-4017-b8c4-119589d8ec6c.png)
+
+2. Получение 1 пончика по id
+
+![image](https://user-images.githubusercontent.com/91110557/204155323-7f8408d0-7908-4314-b354-ee0d6f40678d.png)
+
+В случае некорректного запроса (если запись с таким id не найдена)
+![image](https://user-images.githubusercontent.com/91110557/204155395-17d1c674-cfba-4d10-bce5-487e25e8c176.png)
+
+Если id некорректный
+![image](https://user-images.githubusercontent.com/91110557/204155419-f4181c06-820e-409a-9c7d-3813d2187d4b.png)
+
+
+
