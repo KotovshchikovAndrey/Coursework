@@ -5,6 +5,15 @@ import ApiError from '../../../utils/exceptions/api_errors'
 
 
 export default class DonutController {
+    static async getFullDonutsList(req: Request, res: Response) {
+        const donutService = new DonutService(donutSqlRepository)
+        const fullDonutsList = await donutService.getFullDonutsListFromDb()
+
+        return res.status(200).json({
+            donuts: fullDonutsList,
+        })
+    }
+
     static async getAllDonuts(req: Request, res: Response, next: NextFunction) {
         const donutService = new DonutService(donutSqlRepository)
         const donutsList = await donutService.getAllDonuts(req.query.page as string)
@@ -61,14 +70,10 @@ export default class DonutController {
         })
     }
 
-    static async filterDonuts(req: Request, res: Response) {
-
-    }
-
-    static async deleteIngredient(req: Request, res: Response, next: NextFunction) {
+    static async deleteIngredients(req: Request, res: Response, next: NextFunction) {
         const donutService = new DonutService(donutSqlRepository)
         try {
-            await donutService.deleteIngredient(req.params.id, req.body)
+            await donutService.deleteIngredients(req.params.id, req.body)
             return res.status(200).json({
                 message: 'Ингредиент удален!'
             })

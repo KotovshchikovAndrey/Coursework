@@ -15,9 +15,17 @@ export default class DonutService {
         this.donutRepository = donutRepository
     }
 
+    async getFullDonutsListFromDb() {
+        return await this.donutRepository.find()
+    }
+
     async getAllDonuts(pageNumber: string) {
         const offset = parseInt(pageNumber) * pageLimit - pageLimit
-        const donutsList = await this.donutRepository.find({ take: pageLimit, skip: offset })
+        const donutsList = await this.donutRepository.find({
+            take: pageLimit,
+            skip: offset,
+            select: { id: true, name: true, }
+        })
 
         return donutsList
     }
@@ -30,7 +38,14 @@ export default class DonutService {
     }
 
     async getDetailDonut(donutId: string) {
-        const donut = await this.donutRepository.findOneBy({ id: parseInt(donutId) })
+        const donut = await this.donutRepository.findOne({
+            where: {
+                id: parseInt(donutId)
+            },
+            relations: {
+                ingredients: true
+            }
+        })
         if (donut === null) {
             throw ApiError.notFound('Запись не найдена!')
         }
@@ -82,7 +97,7 @@ export default class DonutService {
         })
     }
 
-    async deleteIngredient(donutId: string, removeDonutIngredientData: RemoveDonutIngredientDto) {
+    async deleteIngredients(donutId: string, removeDonutIngredientData: RemoveDonutIngredientDto) {
         const { ingredientsNames } = removeDonutIngredientData
         if (!ingredientsNames) {
             return

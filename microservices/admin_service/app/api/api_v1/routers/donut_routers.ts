@@ -6,6 +6,10 @@ const donutRouter = express.Router()
 
 donutRouter
     .all(
+        '/full',
+        DonutController.getFullDonutsList
+    )
+    .all(
         '/all',
         (req: Request, res: Response, next: NextFunction) => {
             createDonutValidator('ListValidator').validate(req, res, next)
@@ -41,11 +45,11 @@ donutRouter
         DonutController.deleteDonut
     )
     .delete(
-        '/ingredient.remove/:id',
+        '/ingredients.remove/:id',
         (req: Request, res: Response, next: NextFunction) => {
             createDonutValidator('DetailValidator').validate(req, res, next)
         },
-        DonutController.deleteIngredient
+        DonutController.deleteIngredients
     )
 
 export default donutRouter
