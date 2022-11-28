@@ -1,35 +1,20 @@
 import { Request, Response, NextFunction } from 'express'
-import { ParamsDictionary } from 'express-serve-static-core'
-import { ParsedQs } from 'qs'
+import { DetailValidator, ListValidator } from './abstract_middlewares'
 import ApiError from '../../utils/exceptions/api_errors'
 import { Validator } from './interfaces'
 
 
-class DonutListValidator implements Validator {
+class DonutListValidator extends ListValidator {
     validate(req: Request, res: Response, next: NextFunction) {
         this.validateQueryParams(req)
         next()
     }
-
-    private validateQueryParams(req: Request) {
-        const page = req.query.page
-        const pageNumber = Number(page)
-        if (pageNumber.toString() !== page) {
-            req.query.page = '1'
-        } else if (pageNumber < 1) {
-            req.query.page = '1'
-        } else {
-            req.query.page = pageNumber.toString()
-        }
-    }
 }
 
 
-class DonutDetailValidator implements Validator {
-    private errorsArray: Array<string>
-
+class DonutDetailValidator extends DetailValidator {
     constructor() {
-        this.errorsArray = []
+        super()
     }
 
     validate(req: Request, res: Response, next: NextFunction) {
@@ -39,13 +24,6 @@ class DonutDetailValidator implements Validator {
         }
 
         next()
-    }
-
-    private validateId(id: string) {
-        const intId = parseInt(id)
-        if (intId.toString() !== id) {
-            this.errorsArray.push('id должен быть целым числом!')
-        }
     }
 }
 

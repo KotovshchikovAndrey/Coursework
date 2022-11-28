@@ -1,34 +1,21 @@
 import { Request, Response, NextFunction } from 'express'
+import { DetailValidator, ListValidator } from './abstract_middlewares'
 import { Validator } from './interfaces'
 import ApiError from '../../utils/exceptions/api_errors'
 import fileUpload from 'express-fileupload'
 import * as path from 'path'
 
 
-class IngredientListValidator implements Validator {
+class IngredientListValidator extends ListValidator {
     validate(req: Request, res: Response, next: NextFunction) {
         this.validateQueryParams(req)
         next()
     }
-
-    private validateQueryParams(req: Request) {
-        const page = req.query.page
-        const pageNumber = Number(page)
-        if (pageNumber.toString() !== page) {
-            req.query.page = '1'
-        } else if (pageNumber < 1) {
-            req.query.page = '1'
-        } else {
-            req.query.page = pageNumber.toString()
-        }
-    }
 }
 
-class IngredientDetailValidator implements Validator {
-    private errorsArray: Array<string>
-
+class IngredientDetailValidator extends DetailValidator {
     constructor() {
-        this.errorsArray = []
+        super()
     }
 
     validate(req: Request, res: Response, next: NextFunction) {
@@ -38,13 +25,6 @@ class IngredientDetailValidator implements Validator {
         }
 
         next()
-    }
-
-    private validateId(id: string) {
-        const intId = parseInt(id)
-        if (intId.toString() !== id) {
-            this.errorsArray.push('id должен быть целым числом!')
-        }
     }
 }
 
