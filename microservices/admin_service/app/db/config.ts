@@ -2,7 +2,7 @@ import { DataSourceOptions } from "typeorm"
 
 // Конфигурация базы данных
 const databaseConfig: DataSourceOptions = {
-    type: "postgres",
+    type: "mysql" || process.env.DEV_DB_TYPE,
     host: process.env.DEV_DB_HOST || "localhost",
     port: Number(process.env.DEV_DB_PORT) || 5432,
     username: process.env.DEV_DB_USERNAME || "postgres",
