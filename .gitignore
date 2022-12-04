@@ -129,4 +129,3 @@ dmypy.json
 
 # admin_service
 **/node_modules/
-**/dist/
