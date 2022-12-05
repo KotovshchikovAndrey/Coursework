@@ -19,8 +19,10 @@ class UserCreateSchema(BaseModel):
         errors_list = []
         for field in cls.__fields__:
             try:
-                field_errors = getattr(cls, f'check_{field}')(
-                    values.get(field, None))
+                field_errors = getattr(
+                    cls, 
+                    f'check_{field}')(values.get(field, None)
+                )
             except AttributeError:
                 continue
             else:
@@ -34,7 +36,9 @@ class UserCreateSchema(BaseModel):
 
         if errors_list:
             raise ApiError.bad_request(
-                message='Введены невалидные данные!', errors_list=errors_list)
+                message='Введены невалидные данные!', 
+                errors_list=errors_list
+            )
 
         return values
 
@@ -81,6 +85,8 @@ class UserСredentialsSchema(BaseModel):
 
         if any((not name, not password)):
             raise ApiError.bad_request(
-                message='Заполните все поля для входа в систему!', errors_list=[])
+                message='Заполните все поля для входа в систему!', 
+                errors_list=[]
+            )
 
         return values

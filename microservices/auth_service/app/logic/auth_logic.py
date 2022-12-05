@@ -12,9 +12,7 @@ from db.schemas import (
 
 
 class AuthService:
-    # отдельный сервис, инкапсулирующий логику по работе с пользователями
     _user_service: UserService
-    # отдельный сервис, инкапсулирующий логику по работе с токенами
     _token_service: TokenService
 
     def __init__(
@@ -31,7 +29,11 @@ class AuthService:
 
         created_user = await self._user_service.create_user(user_data)
         access_token, refresh_token = await self._create_tokens_for_user(
-            payload={'user_id': created_user.id, 'name': created_user.name})
+            payload={
+                'user_id': created_user.id,
+                'name': created_user.name
+            }
+        )
 
         return UserResponseSchema(**created_user.dict()), access_token, refresh_token
 
@@ -42,7 +44,11 @@ class AuthService:
             raise ApiError.unauthorized(message='Неверный логин или пароль!')
 
         access_token, refresh_token = await self._create_tokens_for_user(
-            payload={'user_id': user.id, 'name': user.name})
+            payload={
+                'user_id': user.id,
+                'name': user.name
+            }
+        )
 
         return access_token, refresh_token
 
@@ -51,12 +57,17 @@ class AuthService:
         refresh_token = request.cookies.get('refresh_token', None)
         if refresh_token is not None:
             user_id = request.state.token_data['payload']['user_id']
-            await self._token_service.remove_user_token(user_id=user_id, token=refresh_token)
+            await self._token_service.remove_user_token(
+                user_id=user_id,
+                token=refresh_token
+            )
 
     async def refresh_token(self, token: str, payload: dict = {}):
         """Метод, инкапсулирующий логику обновления refresh jwt токена пользователя"""
         new_access_token, new_refresh_token = await self._update_tokens_for_user(
-            token=token, payload=payload)
+            token=token,
+            payload=payload
+        )
 
         return new_access_token, new_refresh_token
 
@@ -82,28 +93,32 @@ class AuthService:
 
     async def _update_tokens_for_user(self, token: str, payload: dict = {}) -> tp.Tuple[str, str]:
         """Создает новую пару access refresh токенов и обновляет refresh токен в базе данных"""
-        access_token, refresh_token = self._generate_tokens_for_user(
-            payload=payload)
-
+        access_token, refresh_token = self._generate_tokens_for_user(payload=payload)
         await self._token_service.update_token_for_user(
-            user_id=payload['user_id'], old_token_value=token, new_token_value=refresh_token
+            user_id=payload['user_id'], 
+            old_token_value=token, 
+            new_token_value=refresh_token
         )
+
         return access_token, refresh_token
 
     async def _create_tokens_for_user(self, payload: dict = {}) -> tp.Tuple[str, str]:
         """Создает пару access refresh токенов и привязывает их к пользователю"""
-        access_token, refresh_token = self._generate_tokens_for_user(
-            payload=payload)
+        access_token, refresh_token = self._generate_tokens_for_user(payload=payload)
+        await self._token_service.set_token_for_user(
+            token=refresh_token, 
+            user_id=payload['user_id']
+        )
 
-        await self._token_service.set_token_for_user(token=refresh_token, user_id=payload['user_id'])
         return access_token, refresh_token
 
     def _generate_tokens_for_user(self, payload: dict = {}) -> tp.Tuple[str, str]:
         """Генерирует пару access и refresh токенов"""
-        access_token = self._token_service.generate_access_token(
-            payload=payload)
-        access_token_slice_start, access_token_slice_end = map(int, os.getenv(
-            'ACCESS_TOKEN_SLICE_FOR_REFRESH_TOKEN').split())
+        access_token = self._token_service.generate_access_token(payload=payload)
+        access_token_slice_start, access_token_slice_end = map(
+            int, 
+            os.getenv('ACCESS_TOKEN_SLICE_FOR_REFRESH_TOKEN').split()
+        )
         refresh_token = self._token_service.generate_refresh_token(
             payload=payload,
             access_token_part=access_token[access_token_slice_start:access_token_slice_end]

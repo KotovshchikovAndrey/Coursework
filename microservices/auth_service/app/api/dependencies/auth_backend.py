@@ -29,7 +29,9 @@ class AuthBackend:
             raise ApiError.unauthorized(message='Токен не был получен!')
 
         access_tokenis_valid = await self._check_access_token(
-            request, token=access_token)
+            request, 
+            token=access_token
+        )
         if not access_tokenis_valid:
             raise ApiError.unauthorized('Токен невалиден!')
 
@@ -39,7 +41,9 @@ class AuthBackend:
         """Проверяет валидность access токена"""
         try:
             payload = jwt.decode(token, os.getenv(
-                'TOKEN_SECRET_KEY'), algorithms=[os.getenv('TOKEN_ALGORITHM')])
+                'TOKEN_SECRET_KEY'), 
+                algorithms=[os.getenv('TOKEN_ALGORITHM')]
+            )
         except JWTError:
             return False
 
@@ -52,6 +56,8 @@ class AuthBackend:
             return False
 
         request.state.token_data = {
-            'token': token, 'payload': payload.copy()}
+            'token': token, 
+            'payload': payload.copy()
+        }
 
         return True

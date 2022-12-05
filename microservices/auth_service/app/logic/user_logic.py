@@ -21,7 +21,9 @@ class UserService:
 
         if errors_list:
             raise ApiError.bad_request(
-                message='Введены невалидные данный!', errors_list=errors_list)
+                message='Введены невалидные данный!',
+                errors_list=errors_list
+            )
 
     async def create_user(self, user_data: dict) -> UserSchema:
         """Создает пользователя"""

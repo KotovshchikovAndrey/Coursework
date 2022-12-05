@@ -39,18 +39,31 @@ class TokenService:
             algorithm=os.getenv('TOKEN_ALGORITHM')
         )
 
+        if len(refresh_token) > 255:
+            return refresh_token[:255]
+
         return refresh_token
 
     async def set_token_for_user(self, token: str, user_id: int) -> None:
         """Привязывает сгенерированный refresh токен к пользователю"""
         await self._repository.create(token=token, user_id=user_id)
 
-    async def update_token_for_user(self, user_id: int, old_token_value: str, new_token_value: str) -> None:
+    async def update_token_for_user(
+        self,
+        user_id: int,
+        old_token_value: str,
+        new_token_value: str
+    ) -> None:
         """Ищет токен пользователя и обновляет его значение"""
         token_instance = await self._repository.get_by_params(
-            user_id=user_id, token=old_token_value)
+            user_id=user_id,
+            token=old_token_value
+        )
+
         await self._repository.update(
-            instanсe=token_instance, new_value=new_token_value)
+            instanсe=token_instance,
+            new_value=new_token_value
+        )
 
     async def remove_user_token(self, user_id: int, token: str) -> None:
         """Ищет токен пользователя и удаляет его, если он есть"""
@@ -63,5 +76,9 @@ class TokenService:
             Ищет refresh токен пользователя по его значению. 
             Вернет данные о токене, если найдет, иначе вернет None.
         """
-        token_in_db = await self._repository.get_by_params(user_id=user_id, token=token)
+        token_in_db = await self._repository.get_by_params(
+            user_id=user_id,
+            token=token
+        )
+
         return TokenSchema.from_orm(token_in_db) if token is not None else None

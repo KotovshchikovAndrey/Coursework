@@ -54,16 +54,18 @@ class RefreshTokenBackend:
             Если токен валидный, установит в параметр request словарь
             С id пользвателя, и значением токена и вернет True.
         """
-        access_token_slice_start, access_token_slice_end = map(int, os.getenv(
-            'ACCESS_TOKEN_SLICE_FOR_REFRESH_TOKEN').split())
+        access_token_slice_start, access_token_slice_end = map(
+            int, 
+            os.getenv('ACCESS_TOKEN_SLICE_FOR_REFRESH_TOKEN').split()
+        )
         access_token_part = access_token[access_token_slice_start:access_token_slice_end]
         try:
             payload = jwt.decode(
                 refresh_token,
                 os.getenv('TOKEN_SECRET_KEY') + access_token_part,
-                algorithms=[os.getenv('TOKEN_ALGORITHM')])
+                algorithms=[os.getenv('TOKEN_ALGORITHM')]
+            )
         except JWTError:
-
             return False
 
         user_id = payload.get('user_id', None)
@@ -71,12 +73,16 @@ class RefreshTokenBackend:
             return False
 
         token_in_db = await self._auth_service.check_token_in_db(
-            user_id=user_id, token=refresh_token)
+            user_id=user_id, 
+            token=refresh_token
+        )
 
         if not token_in_db:
             return False
 
         request.state.token_data = {
-            'token': refresh_token, 'payload': payload.copy()}
+            'token': refresh_token, 
+            'payload': payload.copy()
+        }
 
         return True
