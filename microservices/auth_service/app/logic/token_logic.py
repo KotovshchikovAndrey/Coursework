@@ -81,4 +81,4 @@ class TokenService:
             token=token
         )
 
-        return TokenSchema.from_orm(token_in_db) if token is not None else None
+        return TokenSchema.from_orm(token_in_db) if token_in_db is not None else None
